@@ -7,12 +7,11 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class VictualRegistrars {
@@ -27,7 +26,7 @@ public class VictualRegistrars {
     public static void init(IEventBus modBus) {
         REGISTRARS.forEach(registry -> {
             registry.registrar().register(modBus);
-            registry.registerEntries().run();
+            registry.registerEntries().accept(modBus);
         });
 
         VictualDataMaps.register(modBus);
@@ -38,6 +37,10 @@ public class VictualRegistrars {
     }
 
     private static <T, D extends DeferredRegister<T>> D registrar(Function<String, D> factory, Runnable registerEntries) {
+        return registrar(factory, bus -> registerEntries.run());
+    }
+
+    private static <T, D extends DeferredRegister<T>> D registrar(Function<String, D> factory, Consumer<IEventBus> registerEntries) {
         var result = factory.apply(AshsVictuals.ID);
         REGISTRARS.add(new RegistryInit(result, registerEntries));
         return result;
@@ -47,5 +50,5 @@ public class VictualRegistrars {
         return BLOCK.getEntries().stream().map(e -> (Block) e.value()).toList();
     }
 
-    private record RegistryInit(DeferredRegister<?> registrar, Runnable registerEntries) {}
+    private record RegistryInit(DeferredRegister<?> registrar, Consumer<IEventBus> registerEntries) {}
 }

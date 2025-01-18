@@ -1,0 +1,52 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "components": {
+                "ashs_victuals:sapling": {}
+              },
+              "conditions": [
+                {
+                  "block": "ashs_victuals:apple_seeds",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": {
+                      "min": "2"
+                    }
+                  }
+                }
+              ],
+              "function": "minecraft:set_components"
+            },
+            {
+              "components": {
+                "minecraft:item_name": "{\"translate\":\"block.ashs_victuals.apple_sapling\"}"
+              },
+              "conditions": [
+                {
+                  "block": "ashs_victuals:apple_seeds",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "age": {
+                      "min": "2"
+                    }
+                  }
+                }
+              ],
+              "function": "minecraft:set_components"
+            }
+          ],
+          "name": "ashs_victuals:apple_seeds"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ashs_victuals:blocks/apple_seeds"
+}

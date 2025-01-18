@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "ashs_victuals:block/apple_seeds_stage0"
+    },
+    "age=1": {
+      "model": "ashs_victuals:block/apple_seeds_stage1"
+    },
+    "age=2": {
+      "model": "ashs_victuals:block/apple_seeds_stage2"
+    },
+    "age=3": {
+      "model": "ashs_victuals:block/apple_seeds_stage3"
+    }
+  }
+}

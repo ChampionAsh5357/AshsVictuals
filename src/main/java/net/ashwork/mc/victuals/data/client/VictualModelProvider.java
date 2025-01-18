@@ -1,7 +1,5 @@
 package net.ashwork.mc.victuals.data.client;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.ashwork.mc.victuals.AshsVictuals;
 import net.ashwork.mc.victuals.block.SeedSaplingBlock;
 import net.ashwork.mc.victuals.init.VictualBlocks;
@@ -14,10 +12,10 @@ import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.blockstates.Variant;
 import net.minecraft.client.data.models.blockstates.VariantProperties;
 import net.minecraft.client.data.models.model.ItemModelUtils;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
 
@@ -41,7 +39,10 @@ public class VictualModelProvider extends ModelProvider {
         PropertyDispatch propertydispatch = PropertyDispatch.property(ageProperty).generate(age ->
                         Variant.variant().with(
                                 VariantProperties.MODEL,
-                                blockModels.createSuffixedVariant(block, "_stage" + age, ModelTemplates.CROSS, TextureMapping::cross)
+                                blockModels.createSuffixedVariant(
+                                        block, "_stage" + age,
+                                        ModelTemplates.CROSS.extend().renderType("cutout").build(), TextureMapping::cross
+                                )
                         )
         );
         blockModels.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block).with(propertydispatch));
@@ -49,8 +50,12 @@ public class VictualModelProvider extends ModelProvider {
         // Item model
         blockModels.itemModelOutput.accept(block.asItem(), ItemModelUtils.conditional(
                 ItemModelUtils.hasComponent(VictualDataComponentTypes.SAPLING.get()),
-                ItemModelUtils.plainModel(blockModels.createFlatItemModel(block.asItem())),
-                ItemModelUtils.plainModel(blockModels.createFlatItemModelWithBlockTexture(block.asItem(), block, "_stage2"))
+                ItemModelUtils.plainModel(ModelTemplates.FLAT_ITEM.create(
+                        ModelLocationUtils.decorateItemModelLocation(AshsVictuals.ID + ":apple_sapling"),
+                        TextureMapping.layer0(TextureMapping.getBlockTexture(block, "_stage2")),
+                        blockModels.modelOutput
+                )),
+                ItemModelUtils.plainModel(blockModels.createFlatItemModel(block.asItem()))
         ));
     }
 }
