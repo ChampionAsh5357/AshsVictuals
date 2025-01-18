@@ -5,9 +5,15 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 public interface StatePropertiesPredicateBuilderExtension {
 
-    StatePropertiesPredicate.Builder greaterOrEqualTo(Property<Integer> property, int minInclusive);
+    default StatePropertiesPredicate.Builder greaterOrEqualTo(Property<Integer> property, int minInclusive) {
+        return null;
+    }
 
-    StatePropertiesPredicate.Builder lessThan(Property<Integer> property, int maxExclusive);
+    default StatePropertiesPredicate.Builder lessThan(Property<Integer> property, int maxExclusive) {
+        return null;
+    }
 
-    StatePropertiesPredicate.Builder between(Property<Integer> property, int minInclusive, int maxExclusive);
+    default StatePropertiesPredicate.Builder between(Property<Integer> property, int minInclusive, int maxExclusive) {
+        return null;
+    }
 }
