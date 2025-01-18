@@ -5,7 +5,7 @@ plugins {
     id("eclipse")
     id("idea")
     id("maven-publish")
-    id("net.neoforged.gradle.userdev") version "7.0.176"
+    id("net.neoforged.gradle.userdev") version "7.0.180"
     id("org.cadixdev.licenser") version "0.6.1"
 }
 
