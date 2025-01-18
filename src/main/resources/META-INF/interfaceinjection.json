@@ -1,0 +1,5 @@
+{
+    "net/minecraft/advancements/critereon/StatePropertiesPredicate$Builder": [
+        "net/ashwork/mc/victuals/extension/StatePropertiesPredicateBuilderExtension"
+    ]
+}
