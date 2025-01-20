@@ -1,9 +1,11 @@
 package net.ashwork.mc.victuals.block;
 
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.ashwork.mc.victuals.init.VictualBlockTypes;
 import net.ashwork.mc.victuals.init.VictualDataComponentTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
@@ -19,11 +21,29 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Function;
 
 public class SeedSaplingBlock extends BushBlock implements BonemealableBlock {
 
+    public static final Function<RecordCodecBuilder<SeedSaplingBlock, Properties>, MapCodec<SeedSaplingBlock>> CODEC_BUILDER =
+            properties -> RecordCodecBuilder.mapCodec(instance ->
+                    instance.group(
+                            TreeGrower.CODEC.fieldOf("tree").forGetter(sapling -> sapling.tree),
+                            TagKey.codec(Registries.BLOCK).fieldOf("soil").forGetter(sapling -> sapling.soil),
+                            properties
+                    ).apply(instance, SeedSaplingBlock::new)
+            );
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
+    private static final VoxelShape[] SHAPES = new VoxelShape[]{
+            Block.box(6, 0, 6, 10, 3, 10),
+            Block.box(5, 0, 5, 12, 8, 12),
+            Block.box(2, 0, 2, 14, 13, 14),
+            Block.box(0, 0, 0, 15, 15, 15)
+    };
 
     protected final TreeGrower tree;
     protected final TagKey<Block> soil;
@@ -32,6 +52,11 @@ public class SeedSaplingBlock extends BushBlock implements BonemealableBlock {
         super(properties);
         this.tree = tree;
         this.soil = soil;
+    }
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPES[state.getValue(AGE)];
     }
 
     @Nullable
@@ -62,9 +87,9 @@ public class SeedSaplingBlock extends BushBlock implements BonemealableBlock {
 
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        // TODO: Implement stage increase
         if (!level.isAreaLoaded(pos, 1)) return;
-        if (random.nextInt(7) == 0) {
+        // TODO: Check light information and add in mutation settings
+        if (level.getMaxLocalRawBrightness(pos) >= 9 && random.nextInt(7) == 0) {
             this.advanceGrowth(state, level, pos, random);
         }
     }
@@ -82,20 +107,11 @@ public class SeedSaplingBlock extends BushBlock implements BonemealableBlock {
 
     @Override
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
-        // TODO: Advance to next stage
         this.advanceGrowth(state, level, pos, random);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(AGE);
-    }
-
-    public TagKey<Block> getSoil() {
-        return this.soil;
-    }
-
-    public TreeGrower getTree() {
-        return this.tree;
     }
 }

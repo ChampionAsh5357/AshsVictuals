@@ -18,8 +18,6 @@ import java.util.function.Function;
 public class VictualBlocks {
 
     // TODO: Change grower and tag to one specific for apple seeds
-    // TODO: Change stage 2 and 3 texture to apple specific textures
-    // TODO: Change apple seeds item texture to apple specific texture
     public static final DeferredBlock<SeedSaplingBlock> APPLE_SEEDS = blockWithSimpleItem("apple_seeds", properties ->
             new SeedSaplingBlock(TreeGrower.OAK, BlockTags.DIRT, properties.mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY))
     );
