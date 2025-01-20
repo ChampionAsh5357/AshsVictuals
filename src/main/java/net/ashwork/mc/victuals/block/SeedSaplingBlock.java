@@ -56,7 +56,7 @@ public class SeedSaplingBlock extends BushBlock implements BonemealableBlock {
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPES[state.getValue(AGE)];
+        return SHAPES[state.getValue(AGE)].move(state.getOffset(pos));
     }
 
     @Nullable

@@ -19,7 +19,12 @@ public class VictualBlocks {
 
     // TODO: Change grower and tag to one specific for apple seeds
     public static final DeferredBlock<SeedSaplingBlock> APPLE_SEEDS = blockWithSimpleItem("apple_seeds", properties ->
-            new SeedSaplingBlock(TreeGrower.OAK, BlockTags.DIRT, properties.mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY))
+            new SeedSaplingBlock(
+                    TreeGrower.OAK, BlockTags.DIRT,
+                    properties.mapColor(MapColor.PLANT)
+                            .noCollission().randomTicks().instabreak().offsetType(BlockBehaviour.OffsetType.XZ)
+                            .sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)
+            )
     );
 
     private static <B extends Block> DeferredBlock<B> blockWithSimpleItem(String name, Function<BlockBehaviour.Properties, B> factory) {
