@@ -8,7 +8,7 @@ import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.loot.BlockLootSubProvider;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Unit;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
@@ -39,7 +39,7 @@ public class VictualBlockLoot extends BlockLootSubProvider {
         this.dropSeedsOrSapling(VictualBlocks.APPLE_SEEDS, VictualBlocks.Keys.APPLE_SAPLING, SeedSaplingBlock.AGE);
     }
 
-    private void dropSeedsOrSapling(Supplier<? extends Block> blockHolder, MutableComponent saplingName, Property<Integer> property) {
+    private void dropSeedsOrSapling(Supplier<? extends Block> blockHolder, Component saplingName, Property<Integer> property) {
         var block = blockHolder.get();
         var saplingCondition = LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
                 .setProperties(StatePropertiesPredicate.Builder.properties()

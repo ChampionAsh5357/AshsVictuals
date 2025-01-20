@@ -5,6 +5,7 @@ import net.ashwork.mc.victuals.AshsVictuals;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -20,6 +21,7 @@ public class VictualRegistrars {
 
     static final DeferredRegister.Blocks BLOCK = registrar(DeferredRegister::createBlocks, VictualBlocks::register);
     static final DeferredRegister.DataComponents DATA_COMPONENT_TYPE = registrar(id -> DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, id), VictualDataComponentTypes::register);
+    static final DeferredRegister<CreativeModeTab> CREATIVE_TAB = registrar(Registries.CREATIVE_MODE_TAB, VictualCreativeTabs::register);
     static final DeferredRegister.Items ITEM = registrar(DeferredRegister::createItems, VictualItems::register);
     static final DeferredRegister<MapCodec<? extends Block>> BLOCK_TYPE = registrar(Registries.BLOCK_TYPE, VictualBlockTypes::register);
 
@@ -33,6 +35,10 @@ public class VictualRegistrars {
     }
 
     private static <T> DeferredRegister<T> registrar(ResourceKey<? extends Registry<T>> registry, Runnable registerEntries) {
+        return registrar(id -> DeferredRegister.create(registry, id), registerEntries);
+    }
+
+    private static <T> DeferredRegister<T> registrar(ResourceKey<? extends Registry<T>> registry, Consumer<IEventBus> registerEntries) {
         return registrar(id -> DeferredRegister.create(registry, id), registerEntries);
     }
 

@@ -3,7 +3,7 @@ package net.ashwork.mc.victuals.init;
 import net.ashwork.mc.victuals.block.SeedSaplingBlock;
 import net.ashwork.mc.victuals.util.VictualHelper;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -37,6 +37,6 @@ public class VictualBlocks {
 
     public interface Keys {
 
-        MutableComponent APPLE_SAPLING = VictualHelper.createTranslation(Registries.BLOCK, "apple_sapling");
+        Component APPLE_SAPLING = VictualHelper.createTranslation(Registries.BLOCK, "apple_sapling");
     }
 }
