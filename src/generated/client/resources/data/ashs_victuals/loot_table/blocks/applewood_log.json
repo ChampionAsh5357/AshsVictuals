@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "ashs_victuals:applewood_log"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "ashs_victuals:blocks/applewood_log"
+}

@@ -15,6 +15,7 @@ import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.data.models.model.TexturedModel;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -29,6 +30,11 @@ public class VictualModelProvider extends ModelProvider {
 
     @Override
     protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
+        blockModels.woodProvider(VictualBlocks.APPLEWOOD_LOG.get())
+                .logWithHorizontal(VictualBlocks.APPLEWOOD_LOG.get())
+                .wood(VictualBlocks.APPLEWOOD.get());
+        // TODO: Figure out if the tint value is really what I want
+        blockModels.createTintedLeaves(VictualBlocks.APPLE_LEAVES.get(), TexturedModel.LEAVES, -12012264);
         createSeedOrSaplingBlock(blockModels, VictualBlocks.APPLE_SEEDS, SeedSaplingBlock.AGE);
     }
 

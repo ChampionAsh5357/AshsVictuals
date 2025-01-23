@@ -36,6 +36,10 @@ public class VictualBlockLoot extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
+        this.dropSelf(VictualBlocks.APPLEWOOD_LOG.get());
+        this.dropSelf(VictualBlocks.APPLEWOOD.get());
+        // TODO: Figure out how I want to handle apple leaves
+        this.dropSelf(VictualBlocks.APPLE_LEAVES.get());
         this.dropSeedsOrSapling(VictualBlocks.APPLE_SEEDS, VictualBlocks.Keys.APPLE_SAPLING, SeedSaplingBlock.AGE);
     }
 

@@ -21,6 +21,9 @@ public class VictualLanguageProvider extends LanguageProvider {
     protected void addTranslations() {
         this.addBlock(VictualBlocks.APPLE_SEEDS, "Apple Seeds");
         this.add(VictualBlocks.Keys.APPLE_SAPLING, "Apple Sapling");
+        this.addBlock(VictualBlocks.APPLEWOOD_LOG, "Applewood Log");
+        this.addBlock(VictualBlocks.APPLEWOOD, "Applewood");
+        this.addBlock(VictualBlocks.APPLE_LEAVES, "Apple Leaves");
 
         this.addCreativeTab(VictualCreativeTabs.MAIN, "Ash's Victuals");
     }

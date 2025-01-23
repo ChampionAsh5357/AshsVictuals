@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "ashs_victuals:block/apple_leaves"
+  }
+}

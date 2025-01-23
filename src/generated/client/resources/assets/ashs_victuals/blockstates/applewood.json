@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "ashs_victuals:block/applewood",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "ashs_victuals:block/applewood"
+    },
+    "axis=z": {
+      "model": "ashs_victuals:block/applewood",
+      "x": 90
+    }
+  }
+}
