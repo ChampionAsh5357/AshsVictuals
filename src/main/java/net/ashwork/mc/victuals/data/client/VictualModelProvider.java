@@ -30,11 +30,10 @@ public class VictualModelProvider extends ModelProvider {
 
     @Override
     protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
-        blockModels.woodProvider(VictualBlocks.APPLEWOOD_LOG.get())
-                .logWithHorizontal(VictualBlocks.APPLEWOOD_LOG.get())
-                .wood(VictualBlocks.APPLEWOOD.get());
-        // TODO: Figure out if the tint value is really what I want
-        blockModels.createTintedLeaves(VictualBlocks.APPLE_LEAVES.get(), TexturedModel.LEAVES, -12012264);
+        blockModels.woodProvider(VictualBlocks.APPLE_LOG.get())
+                .logWithHorizontal(VictualBlocks.APPLE_LOG.get())
+                .wood(VictualBlocks.APPLE_WOOD.get());
+        blockModels.createTintedLeaves(VictualBlocks.APPLE_LEAVES.get(), TexturedModel.LEAVES, 0x74AC47);
         createSeedOrSaplingBlock(blockModels, VictualBlocks.APPLE_SEEDS, SeedSaplingBlock.AGE);
     }
 

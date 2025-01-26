@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "ashs_victuals:applewood"
+          "name": "ashs_victuals:apple_wood"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "ashs_victuals:blocks/applewood"
+  "random_sequence": "ashs_victuals:blocks/apple_wood"
 }

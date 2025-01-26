@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "ashs_victuals:block/applewood_log",
-    "side": "ashs_victuals:block/applewood_log"
-  }
-}

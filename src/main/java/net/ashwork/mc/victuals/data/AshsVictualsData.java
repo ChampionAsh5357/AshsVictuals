@@ -1,18 +1,21 @@
 package net.ashwork.mc.victuals.data;
 
-import net.ashwork.mc.victuals.AshsVictuals;
+import net.ashwork.mc.victuals.data.server.init.VictualRegistrarsData;
 import net.ashwork.mc.victuals.data.server.loot.VictualBlockLoot;
-import net.ashwork.mc.victuals.init.VictualBlocks;
+import net.ashwork.mc.victuals.data.server.tags.VictualBlockTagsProvider;
+import net.ashwork.mc.victuals.data.server.tags.VictualItemTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.conditions.ICondition;
-import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.ArrayList;
@@ -20,9 +23,7 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiConsumer;
 
 public abstract class AshsVictualsData {
 
@@ -32,8 +33,8 @@ public abstract class AshsVictualsData {
             // Construct datapack registry objects
             var registryBuilder = new RegistrySetBuilder();
             Map<ResourceKey<?>, List<ICondition>> conditions = new IdentityHashMap<>();
-            this.registerDatapackObjects(registryBuilder, (key, condition) -> conditions.computeIfAbsent(key, k -> new ArrayList<>()).add(condition));
-            var registries = event.createProvider((output, base) -> new DatapackBuiltinEntriesProvider(output, base, registryBuilder, conditions, Set.of(AshsVictuals.ID))).getRegistryProvider();
+            VictualRegistrarsData.init(registryBuilder, (key, condition) -> conditions.computeIfAbsent(key, k -> new ArrayList<>()).add(condition));
+            event.createDatapackRegistryObjects(registryBuilder, conditions);
 
             // Handle data construction
             var packOutput = event.getGenerator().getPackOutput();
@@ -41,12 +42,17 @@ public abstract class AshsVictualsData {
 
                 @Override
                 public <T extends DataProvider> T createProvider(DataProvider.Factory<T> factory) {
-                    return event.addProvider(factory.create(packOutput));
+                    return event.createProvider(factory::create);
                 }
 
                 @Override
                 public <T extends DataProvider> T createProvider(FactoryWithRegistries<T> factory) {
-                    return event.addProvider(factory.create(packOutput, registries));
+                    return event.createProvider(factory::create);
+                }
+
+                @Override
+                public <B extends TagsProvider<Block>, I extends TagsProvider<Item>> void createBlockAndItemTags(FactoryWithRegistries<B> blockTags, ItemTagsProvider<I> itemTags) {
+                    event.createBlockAndItemTags(blockTags::create, itemTags::create);
                 }
 
                 @Override
@@ -63,6 +69,13 @@ public abstract class AshsVictualsData {
                         public <T extends DataProvider> T createProvider(FactoryWithRegistries<T> factory) {
                             return pack.addProvider(output -> factory.create(output, event.getLookupProvider()));
                         }
+
+
+                        @Override
+                        public <B extends TagsProvider<Block>, I extends TagsProvider<Item>> void createBlockAndItemTags(FactoryWithRegistries<B> blockTags, ItemTagsProvider<I> itemTags) {
+                            var tagLookup = this.createProvider(blockTags).contentsGetter();
+                            this.createProvider((output, registries) -> itemTags.create(output, registries, tagLookup));
+                        }
                     };
                 }
             };
@@ -71,12 +84,11 @@ public abstract class AshsVictualsData {
         });
     }
 
-    protected void registerDatapackObjects(RegistrySetBuilder builder, BiConsumer<ResourceKey<?>, ICondition> conditions) {}
-
     protected void addProviders(DataManager manager) {
         manager.createProvider((output, registries) -> new LootTableProvider(output, Collections.emptySet(), List.of(
                 new LootTableProvider.SubProviderEntry(VictualBlockLoot::new, LootContextParamSets.BLOCK)
         ), registries));
+        manager.createBlockAndItemTags(VictualBlockTagsProvider::new, VictualItemTagsProvider::new);
     }
 
     @FunctionalInterface
@@ -85,11 +97,19 @@ public abstract class AshsVictualsData {
         T create(PackOutput output, CompletableFuture<HolderLookup.Provider> registries);
     }
 
+    @FunctionalInterface
+    public interface ItemTagsProvider<I extends TagsProvider<Item>> {
+
+        I create(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, CompletableFuture<TagsProvider.TagLookup<Block>> blockTags);
+    }
+
     public interface PackManager {
 
         <T extends DataProvider> T createProvider(DataProvider.Factory<T> factory);
 
         <T extends DataProvider> T createProvider(FactoryWithRegistries<T> factory);
+
+        <B extends TagsProvider<Block>, I extends TagsProvider<Item>> void createBlockAndItemTags(FactoryWithRegistries<B> blockTags, ItemTagsProvider<I> itemTags);
     }
 
     public interface DataManager extends PackManager {

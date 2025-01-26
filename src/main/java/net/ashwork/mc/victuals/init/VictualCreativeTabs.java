@@ -20,8 +20,8 @@ public class VictualCreativeTabs {
     public static final Supplier<CreativeModeTab> MAIN = creativeTab("main", VictualBlocks.APPLE_SEEDS::toStack, (params, output) -> {
         output.accept(Items.APPLE);
         addSeedsAndSapling(VictualBlocks.APPLE_SEEDS::toStack, VictualBlocks.Keys.APPLE_SAPLING, output::accept);
-        output.accept(VictualBlocks.APPLEWOOD_LOG);
-        output.accept(VictualBlocks.APPLEWOOD);
+        output.accept(VictualBlocks.APPLE_LOG);
+        output.accept(VictualBlocks.APPLE_WOOD);
         output.accept(VictualBlocks.APPLE_LEAVES);
     });
 
@@ -33,8 +33,8 @@ public class VictualCreativeTabs {
     private static void modifyCreativeTabs(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.NATURAL_BLOCKS) {
             addSeedsAndSapling(VictualBlocks.APPLE_SEEDS::toStack, VictualBlocks.Keys.APPLE_SAPLING, event::accept);
-            event.accept(VictualBlocks.APPLEWOOD_LOG);
-            event.accept(VictualBlocks.APPLEWOOD);
+            event.accept(VictualBlocks.APPLE_LOG);
+            event.accept(VictualBlocks.APPLE_WOOD);
             event.accept(VictualBlocks.APPLE_LEAVES);
         }
     }
